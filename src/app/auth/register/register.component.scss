@@ -1,0 +1,155 @@
+:host {
+  height: 100vh;
+  background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1350&q=80') no-repeat center center / cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.register-container {
+  backdrop-filter: blur(15px);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  max-width: 480px;
+  width: 100%;
+}
+
+/* Título */
+.register-container h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 26px;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Formulario */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Mensajes de error del backend */
+.error-message {
+  background-color: #d9534f;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Mensaje de registro exitoso */
+.success-message {
+  background-color: #28a745;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Contenedor del campo de contraseña para posicionar el ícono */
+.password-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Ícono de visibilidad de contraseña */
+.password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 36px; /* Ajusta la posición vertical del ícono */
+  cursor: pointer;
+  color: #333;
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Campos del formulario */
+form div {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #0f0f0f;
+  transition: border-color 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+  padding-right: 40px; /* Agrega espacio para el ícono */
+}
+
+input:focus {
+  border-color: #28a745;
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Errores de validación */
+.error small {
+  color: #d9534f;
+  display: block;
+  margin-top: 5px;
+  font-size: 12px;
+}
+
+/* Botón */
+button[type='submit'] {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-sizing: border-box;
+}
+
+button[type='submit']:hover {
+  background-color: #218838;
+}
+
+button[disabled] {
+  background-color: #a9dfbf;
+  cursor: not-allowed;
+}
+
+/* Link hacia login */
+.register-container .login-link {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.register-container .login-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.register-container .login-link a:hover {
+  text-decoration: underline;
+}

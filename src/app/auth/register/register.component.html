@@ -1,0 +1,63 @@
+<div class="register-container">
+  <h2>Crear cuenta</h2>
+
+  <!-- Mensaje de error general del backend -->
+  <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+  <!-- Mensaje de registro exitoso -->
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+    <div>
+      <label for="name">Nombre completo</label>
+      <input id="name" type="text" formControlName="name" />
+      <div *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid" class="error">
+        <small *ngIf="registerForm.get('name')?.errors?.['required']">El nombre es obligatorio.</small>
+      </div>
+    </div>
+
+    <div>
+      <label for="email">Correo electrónico</label>
+      <input id="email" type="email" formControlName="email" />
+      <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="error">
+        <small *ngIf="registerForm.get('email')?.errors?.['required']">El correo es obligatorio.</small>
+        <small *ngIf="registerForm.get('email')?.errors?.['email']">Correo inválido.</small>
+      </div>
+    </div>
+
+    <div class="password-container">
+      <label for="password">Contraseña</label>
+      <input id="password" [type]="passwordType" formControlName="password" />
+      <span class="password-toggle" (click)="togglePasswordVisibility()">
+        <svg *ngIf="passwordType === 'password'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 1.73A10.66 10.66 0 0 1 12 2c4.7 0 8.72 2.06 10 5.5a17.79 17.79 0 0 1-3.22 4.19l-1.41-1.41"/><path d="M2 12s3-7 10-7c.76 0 1.5.11 2.22.33"/><path d="M22 22 2 2"/><path d="M16.27 16.27a6 6 0 0 1-8.54-8.54"/></svg>
+        <svg *ngIf="passwordType === 'text'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>
+      <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="error">
+        <small *ngIf="registerForm.get('password')?.errors?.['required']">La contraseña es obligatoria.</small>
+        <small *ngIf="registerForm.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</small>
+      </div>
+    </div>
+    
+    <div class="password-container">
+      <label for="confirmPassword">Confirmar Contraseña</label>
+      <input id="confirmPassword" [type]="confirmPasswordType" formControlName="confirmPassword" />
+      <span class="password-toggle" (click)="toggleConfirmPasswordVisibility()">
+        <svg *ngIf="confirmPasswordType === 'password'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-off"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 1.73A10.66 10.66 0 0 1 12 2c4.7 0 8.72 2.06 10 5.5a17.79 17.79 0 0 1-3.22 4.19l-1.41-1.41"/><path d="M2 12s3-7 10-7c.76 0 1.5.11 2.22.33"/><path d="M22 22 2 2"/><path d="M16.27 16.27a6 6 0 0 1-8.54-8.54"/></svg>
+        <svg *ngIf="confirmPasswordType === 'text'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+      </span>
+      <div *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.invalid" class="error">
+        <small *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Confirmar la contraseña es obligatorio.</small>
+      </div>
+      <!-- Mensaje de error personalizado para la validación de contraseñas -->
+      <div *ngIf="registerForm.hasError('passwordsDoNotMatch') && (registerForm.get('password')?.touched || registerForm.get('confirmPassword')?.touched)" class="error">
+        <small>Las contraseñas no coinciden.</small>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="registerForm.invalid">Registrarse</button>
+  </form>
+  
+  <div class="login-link">
+    ¿Ya tienes una cuenta? <a (click)="navigateToLogin()" style="cursor: pointer;">Inicia sesión</a>
+  </div>
+</div>
