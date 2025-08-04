@@ -24,7 +24,7 @@ export interface MonitoringData {
   providedIn: 'root'
 })
 export class MonitoringService {
-  private apiUrl = environment.apiUrl + '/monitoring';
+  private apiUrl = environment.apiUrl;
 
   constructor(
     private http: HttpClient,
@@ -51,7 +51,7 @@ export class MonitoringService {
     });
 
     // Enviamos la petición con los encabezados
-    return this.http.get<MonitoringData[]>(`${this.apiUrl}/data`, { headers }).pipe(
+    return this.http.get<MonitoringData[]>(`${this.apiUrl}/monitoring/data`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
