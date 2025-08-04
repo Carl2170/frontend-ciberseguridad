@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             new Set(data.map((e) => e.event_type))
           );
           this.isLoading = false;
-          //  this.startPolling(); // Inicia el polling para actualizaciones
+          this.startPolling(); // Inicia el polling para actualizaciones
         },
         error: (error) => {
           this.errorMessage =
