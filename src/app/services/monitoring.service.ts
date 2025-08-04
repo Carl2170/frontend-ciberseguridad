@@ -31,12 +31,7 @@ export class MonitoringService {
     private authService: AuthService // Inyectamos el AuthService
   ) { }
 
-  /**
-   * Obtiene todos los datos de monitoreo del backend,
-   * enviando el token de autenticación directamente.
-   * Ahora espera un array de objetos de monitoreo.
-   * @returns Un Observable que emite los datos recibidos de la API.
-   */
+  
   getData(): Observable<MonitoringData[]> {
     const authToken = this.authService.getAccessToken();
 

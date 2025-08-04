@@ -31,8 +31,6 @@ export class ForgotPasswordComponent {
     // Simular llamada al backend para enviar email
     const email = this.forgotForm.value.email;
 
-    // Aquí pondrías la llamada real a tu servicio para recuperar contraseña
-    // Por ahora simulamos un éxito:
     this.successMessage = `Se ha enviado un enlace de recuperación a ${email}`;
     this.errorMessage = null;
 
