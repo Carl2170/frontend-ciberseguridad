@@ -141,3 +141,34 @@ button[disabled] {
   color: #0056b3;
   text-decoration: underline;
 }
+
+/* Nuevos estilos para el loader */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 0;
+  text-align: center;
+  color: #ffffff;
+}
+
+.loading-container p {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.loader {
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

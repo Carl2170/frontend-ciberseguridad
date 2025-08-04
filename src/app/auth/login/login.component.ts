@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
+import { NgIf, CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +13,8 @@ import { AuthService } from '../../services/auth.service';
   imports: [
     ReactiveFormsModule,
     NgIf,
-    HttpClientModule
+    HttpClientModule,
+    CommonModule
   ],
   providers: [
     AuthService
@@ -24,9 +27,16 @@ export class LoginComponent implements OnInit {
   otpForm!: FormGroup;
   otpSent: boolean = false;
   emailForOtp: string = '';
-  errorMessage: string | null = null; // Variable para almacenar mensajes de error del backend
-  passwordType: string = 'password';
+  errorMessage: string | null = null;
   
+  // Variable para controlar el tipo del input de la contraseña
+  passwordType: string = 'password';
+
+  // Variables para controlar los estados de carga
+  isSendingOtp: boolean = false;
+  isVerifyingOtp: boolean = false;
+  isValidatingFields: boolean = false;
+
   constructor(private fb: FormBuilder, private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
@@ -41,7 +51,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    this.errorMessage = null; // Limpiamos el mensaje de error al enviar el formulario
+    this.errorMessage = null;
     if (!this.otpSent) {
       this.loginWithCredentials();
     } else {
@@ -49,45 +59,72 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  loginWithCredentials() {
-    if (this.loginForm.valid) {
+loginWithCredentials() {
+  if (this.loginForm.valid) {
+    this.isValidatingFields = true; // ← Empieza validación de campos (simulada)
+    this.errorMessage = null;
+
+    // Simulamos validación antes del envío real del OTP (500 ms)
+    setTimeout(() => {
+      this.isValidatingFields = false;
+      this.isSendingOtp = true;
       const { email, password } = this.loginForm.value;
-      this.authService.loginWithOtp({ email, password }).subscribe({
-        next: response => {
+
+      this.authService.loginWithOtp({ email, password }).pipe(
+        catchError(err => {
+          this.isSendingOtp = false;
+          console.error('Error al iniciar sesión:', err);
+          this.errorMessage = err.error?.message || 'Error desconocido';
+          return of(null);
+        })
+      ).subscribe(response => {
+        this.isSendingOtp = false;
+        if (response) {
           console.log(response.message);
           this.otpSent = true;
           this.emailForOtp = email;
-        },
-        error: err => {
-          console.error('Error al iniciar sesión:', err);
-          // Mostramos el mensaje de error del backend
-          this.errorMessage = err.error?.message || 'Error desconocido';
         }
       });
-    }
+    }, 500);
+  } else {
+    this.errorMessage = 'Por favor completa los campos correctamente.';
   }
+}
 
-  verifyOtp() {
+
+ verifyOtp() {
     if (this.otpForm.valid) {
+      this.isVerifyingOtp = true; // Empieza el estado de carga para la verificación del OTP
       const { otpCode } = this.otpForm.value;
-      this.authService.verifyOtpAndLogin({ email: this.emailForOtp, otpCode }).subscribe({
-        next: response => {
-          console.log('Login exitoso!', response);
-          // TODO: Guardar los tokens en el almacenamiento local
-          this.router.navigate(['/dashboard']);
-        },
-        error: err => {
+      this.authService.verifyOtpAndLogin({ email: this.emailForOtp, otpCode }).pipe(
+        catchError(err => {
+          this.isVerifyingOtp = false; // Finaliza el estado de carga en caso de error
           console.error('Error de verificación OTP:', err);
-          // Mostramos el mensaje de error del backend
-          this.errorMessage = err.error?.message || 'Error desconocido';
+          this.errorMessage = err.error?.message || 'Código OTP inválido o expirado.';
+          return of(null);
+        })
+      ).subscribe(response => {
+        this.isVerifyingOtp = false; // Finaliza el estado de carga al recibir la respuesta
+        if (response) {
+          console.log('Login exitoso!', response);
+          // Los tokens se guardan dentro del servicio por el tap()
+          
+          // Espera un momento antes de navegar para asegurar que el token se guarde
+          setTimeout(() => {
+            this.router.navigate(['/dashboard']);
+          }, 100);
         }
       });
     }
   }
-
-    togglePasswordVisibility(): void {
+  
+  /**
+   * Alterna el tipo del input de la contraseña para mostrar/ocultar el texto.
+   */
+  togglePasswordVisibility(): void {
     this.passwordType = this.passwordType === 'password' ? 'text' : 'password';
   }
+
   navigateToRegister() {
     this.router.navigate(['/auth/register']);
   }
