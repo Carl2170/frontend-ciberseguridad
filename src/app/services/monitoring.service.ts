@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from './auth.service'; // Importamos el AuthService
+import { environment } from '../environments/environment'; // Asegúrate de importar el entorno correcto
 
 /**
  * Define la estructura de los datos de monitoreo esperados,
@@ -23,7 +24,7 @@ export interface MonitoringData {
   providedIn: 'root'
 })
 export class MonitoringService {
-  private apiUrl = 'http://localhost:3000/api/monitoring';
+  private apiUrl = environment.apiUrl + '/monitoring';
 
   constructor(
     private http: HttpClient,
